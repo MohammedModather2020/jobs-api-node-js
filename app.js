@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 // error handler
-const notFoundMiddleware = require('./middleware/not-found');
+const notFoundMiddleware = require('./middleware/not-found.middleware');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
