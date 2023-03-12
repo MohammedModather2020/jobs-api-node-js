@@ -1,7 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
 const User = require('../models/user.model');
-const BadRequestError = require('../errors/bad-request.error');
-const UnauthenticatedError = require('../errors/unauthenticated.error');
+const {
+  BadRequestError,
+  UnauthenticatedError,
+} = require('../errors/index.error');
 const { generateJwtToken } = require('../middleware/jwt.middleware');
 
 const register = async (req, res) => {
