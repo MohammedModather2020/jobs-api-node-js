@@ -14,13 +14,14 @@ const jobRoute = require('./routes/job.route');
 const notFoundMiddleware = require('./middleware/not-found.middleware');
 const errorHandlerMiddleware = require('./middleware/error-handler.middleware');
 
-app.use(express.json());
-
 // extra packages
+const { verifyJwtToken } = require('./middleware/jwt.middleware');
+
+app.use(express.json());
 
 // routes
 app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/jobs', jobRoute);
+app.use('/api/v1/jobs', verifyJwtToken, jobRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
