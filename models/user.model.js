@@ -27,6 +27,10 @@ UserSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, 10);
 });
 
+UserSchema.methods.comparePassword = async function (canditatePassword) {
+  return await bcrypt.compare(canditatePassword, this.password);
+};
+
 UserSchema.methods.getName = function () {
   return this.name;
 };
