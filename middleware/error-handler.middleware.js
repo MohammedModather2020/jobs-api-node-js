@@ -11,13 +11,19 @@ const errorHandlerMiddleware = (err, req, res, next) => {
         err.keyValue
       )} field, Please choose another value`,
     });
-  } else if (err.name && err.name === 'ValidationError') {
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      code: 0,
-      msg: Object.values(err.errors).map((item) => {
-        return { [item.path]: item?.message };
-      }),
-    });
+  } else if (err.name) {
+    if (err.name === 'ValidationError') {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        code: 0,
+        msg: Object.values(err.errors).map((item) => {
+          return { [item.path]: item?.message };
+        }),
+      });
+    } else if (err.name === 'CastError') {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ code: 0, msg: `No item found with id ${err.value}` });
+    }
   } else {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
