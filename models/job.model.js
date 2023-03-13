@@ -23,7 +23,7 @@ const JobSchema = mongoose.Schema(
       required: [true, 'created by is required'],
     },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('Job', JobSchema);
