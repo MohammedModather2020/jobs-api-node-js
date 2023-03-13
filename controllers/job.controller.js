@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const Job = require('../models/job.model');
-const { BadRequestError } = require('../errors/index.error');
+const { BadRequestError, NotFoundError } = require('../errors/index.error');
 
 const getJobs = async (req, res) => {
   const createdBy = req.user.userId;
@@ -11,7 +11,20 @@ const getJobs = async (req, res) => {
 };
 
 const getJob = async (req, res) => {
-  res.send('Get single job');
+  const {
+    user: { userId },
+    params: { id: jobId },
+  } = req;
+  const job = await Job.findOne({ _id: jobId, createdBy: userId });
+  if (!job) {
+    throw new NotFoundError(`No job with ${jobId}`);
+  } else {
+    res.status(StatusCodes.OK).json({
+      code: 0,
+      msg: 'Successfully get job',
+      data: job,
+    });
+  }
 };
 
 const createJob = async (req, res) => {
