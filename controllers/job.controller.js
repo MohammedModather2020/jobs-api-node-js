@@ -48,7 +48,34 @@ const createJob = async (req, res) => {
 };
 
 const updateJob = async (req, res) => {
-  res.send('Update job');
+  const {
+    user: { userId },
+    params: { id: jobId },
+    body: { company, position, status },
+  } = req;
+
+  if (!company) throw new BadRequestError('company is required');
+  if (!position) throw new BadRequestError('position is required');
+  if (!status) throw new BadRequestError('status is required');
+
+  const job = await Job.findByIdAndUpdate(
+    { _id: jobId, createdBy: userId },
+    { company, position, status },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  if (!job) {
+    throw new NotFoundError(`No job with ${jobId}`);
+  } else {
+    res.status(StatusCodes.OK).json({
+      code: 0,
+      msg: 'Successfully update job',
+      data: job,
+    });
+  }
 };
 
 const deleteJob = async (req, res) => {
